@@ -1,0 +1,63 @@
+version: "3.1"
+stories:
+- story: happy path 2 (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great  # predicted: greet: amazing
+  - action: utter_happy  # predicted: action_default_fallback
+  - intent: goodbye
+  - action: utter_goodbye  # predicted: utter_greet
+- story: sad path 1 (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy  # predicted: deny: not good
+  - action: utter_cheer_up  # predicted: action_default_fallback
+  - action: utter_did_that_help  # predicted: action_listen
+  - intent: affirm
+  - action: utter_happy  # predicted: action_listen
+- story: sad path 2 (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy  # predicted: deny: not good
+  - action: utter_cheer_up  # predicted: action_default_fallback
+  - action: utter_did_that_help  # predicted: action_listen
+  - intent: deny
+  - action: utter_goodbye  # predicted: action_default_fallback
+- story: sad path 3 (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy  # predicted: user_provides_date: very terrible
+  - action: utter_cheer_up  # predicted: action_default_fallback
+  - action: utter_did_that_help  # predicted: action_listen
+  - intent: deny
+  - action: utter_goodbye  # predicted: action_default_fallback
+- story: say goodbye (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye  # predicted: utter_greet
+- story: bot challenge (./venv/lib64/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: bot_challenge  # predicted: goodbye: are you a bot?
+  - action: utter_iamabot  # predicted: action_listen
+- story: interactive_story_1 (./tests/test_stories.yml)
+  steps:
+  - intent: Hi
+  - action: utter_greet  # predicted: action_default_fallback
+  - intent: I want to connect
+  - action: utter_ask_for_connection_date  # predicted: action_default_fallback
+  - intent: May 12 2023
+  - action: action_ask_for_connection_time  # predicted: action_default_fallback
+  - intent: 1:30 PM
+  - action: action_ask_for_email  # predicted: action_default_fallback
+  - intent: anshumankmr80@gmail.com
+  - action: utter_confirm_invite  # predicted: action_default_fallback
+- story: happy path 1 (./venv/lib/python3.10/site-packages/rasa/cli/initial_project/tests/test_stories.yml)
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great  # predicted: greet: amazing
+  - action: utter_happy  # predicted: action_default_fallback

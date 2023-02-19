@@ -1,0 +1,52 @@
+version: '3.1'
+intents:
+- affirm
+- ask_for_call
+- bot_challenge
+- deny
+- goodbye
+- greet
+- user_provides_date
+- user_provides_email
+- user_provides_time
+slots:
+  email_id:
+    type: any
+    mappings:
+    - type: from_entity
+      entity: email_id
+  date:
+    type: text
+    mappings:
+    - type: custom
+  time:
+    type: text
+    mappings:
+    - type: custom    
+responses:
+  utter_greet:
+  - text: Hi! How Can I Help you Today?
+  - text: Hey! How Can I Be of Assistance Today?
+  utter_ask_for_connection_date:
+  - text: Sure. I will help you by setting up a calendar invite. Please help me by providing me the date you want to connect.
+  utter_ask_for_time:
+  - text: Okay. The date you have provided is {date}. Now provide me the time.
+  utter_ask_for_email:
+  - text: Okay. The date is {date} and time for the invite is {time}. Lastly, I would need your email to set up an invite.
+  utter_confirm_invite:
+  - text: Okay. Sent the invite to {email_id} on {date} at  {time}. Please be on time
+actions:
+- utter_greet
+- utter_ask_for_connection_date
+- utter_ask_for_time
+- utter_ask_for_email
+- utter_confirm_invite
+- action_ask_for_connection_time
+- action_ask_for_email
+entities:
+- email_id
+- date
+- time
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

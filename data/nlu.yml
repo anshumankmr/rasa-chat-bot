@@ -1,0 +1,93 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+- intent: ask_for_call
+  examples: |
+    - I want to set up a call
+    - I want to create a calendar invite
+    - I want to set up a connect
+    - give me a good time to connect
+    - set up a calendar event
+    - send me an invite
+    - connect me with him
+    - connect me with her
+    - When can I connect?
+    - when can I have a call with him?
+    - when can I have a call with her?
+    - let me know when we can connect
+    - I want to connect
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+- intent: user_provides_date
+  examples: |
+    - I want to schedule a call on [January 12,1990](date)
+    - Set up a connect on [12/12/1992](date)
+    - Create an invite for [12th of May, 1992](date)
+    - Can we have a call on [12th of May, 1992](date)
+    - Send me an invite for [May 12 2023](date)
+    - I want to connect on [May 12, 2023](date)
+    - Set up a call for [12/12/1992](date)
+    - I want to connect on [May 12 2023](date)
+- intent: user_provides_time
+  examples: |
+    - I want to connect on [12:00 AM](time)
+    - Let's do it at [1:30 PM](time)
+    - How about we do it [midday](time)?
+    - Afternoon at [1:00 PM](TIME) sounds great
+    - Lets doing it during the [evening, say 7:00PM](time)?
+    - Send me an invite for [1:30 PM](time)
+    - Let us do it at [1:30 PM](time)
+- intent: user_provides_email
+  examples: |
+    - Sure, my email is [joe@gmail.com](email_id)
+    - My email ID is [anshuman.kumar@gmail.com](email_id)
+    - You can send the invite to [anshuman@yahoo.com](email_id)
+    - Sure, send it to me [anshuman@gmail.com](email_id)
+    - [anshumankumar@protonmail.com](email_id)
+    - [an@xyz.com](email_id) is my email adddress
+    - my email is [anshumankmr80@gmail.com](email_id)
+    - My email is [anshumankmr80@gmail.com](email_id)
+- regex: email_id
+  examples: |
+    - ^\w+([.-]?\w+)@\w+([.-]?\w+)(.\w{2,3})+$

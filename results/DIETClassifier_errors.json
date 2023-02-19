@@ -1,0 +1,23 @@
+[
+  {
+    "text": "Afternoon at 1:00 PM sounds great",
+    "entities": [
+      {
+        "start": 13,
+        "end": 20,
+        "value": "1:00 PM",
+        "entity": "TIME"
+      }
+    ],
+    "predicted_entities": [
+      {
+        "entity": "time",
+        "start": 13,
+        "end": 20,
+        "confidence_entity": 0.64,
+        "value": "1:00 PM",
+        "extractor": "DIETClassifier"
+      }
+    ]
+  }
+]

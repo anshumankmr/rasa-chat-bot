@@ -1,0 +1,18 @@
+#### This file contains tests to evaluate that your bot behaves as expected.
+#### If you want to learn more, please see the docs: https://rasa.com/docs/rasa/testing-your-assistant
+
+stories:
+
+
+- story: interactive_story_1
+  steps:
+  - intent: Hi
+  - action: utter_greet
+  - intent: I want to connect
+  - action: utter_ask_for_connection_date
+  - intent: May 12 2023
+  - action: action_ask_for_connection_time
+  - intent: 1:30 PM
+  - action: action_ask_for_email
+  - intent: anshumankmr80@gmail.com
+  - action: utter_confirm_invite

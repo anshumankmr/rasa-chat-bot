@@ -1,0 +1,23 @@
+version: "3.1"
+
+stories:
+
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_for_call
+  - action: utter_ask_for_connection_date
+  - intent: user_provides_date
+    entities:
+    - date: null
+  - action: action_ask_for_connection_time
+  - intent: user_provides_time
+    entities:
+    - time: null
+  - action: action_ask_for_email
+  - intent: user_provides_email
+    entities:
+    - email_id: null
+  - action: utter_confirm_invite
