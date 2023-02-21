@@ -9,44 +9,73 @@ intents:
 - user_provides_date
 - user_provides_email
 - user_provides_time
+
+entities:
+- email_id
+- date
+- time
+
 slots:
   email_id:
-    type: any
+    type: text
+    influence_conversation: true
     mappings:
     - type: from_entity
       entity: email_id
   date:
     type: text
+    influence_conversation: true
     mappings:
     - type: custom
+      action: action_ask_date
   time:
+    influence_conversation: true
     type: text
     mappings:
-    - type: custom    
+    - type: custom
+      action: action_ask_time
+
+forms:
+  fetch_user_info_form:
+    required_slots:
+    - email_id
+    - date
+    - time
+
 responses:
   utter_greet:
   - text: Hi! How Can I Help you Today?
   - text: Hey! How Can I Be of Assistance Today?
-  utter_ask_for_connection_date:
-  - text: Sure. I will help you by setting up a calendar invite. Please help me by providing me the date you want to connect.
-  utter_ask_for_time:
-  - text: Okay. The date you have provided is {date}. Now provide me the time.
-  utter_ask_for_email:
-  - text: Okay. The date is {date} and time for the invite is {time}. Lastly, I would need your email to set up an invite.
+  utter_ask_for_info:
+  - text: I would need some information from you. I would need the date,time and email address for the connect.
+  # utter_ask_time:
+  # - text: Okay. The time you have provided is {time}.
+  # utter_ask_date:
+  # - text: Okay. The date you have provided is {date}.
+  utter_ask_email:
+  - text: Okay. The email is {email}.
   utter_confirm_invite:
   - text: Okay. Sent the invite to {email_id} on {date} at  {time}. Please be on time
+  utter_invalid_date:
+  - text: That is an invalid date. Please try again.
+  utter_invalid_time:
+  - text: That is an invalid time. Please try again.
+  utter_invalid_email_id:
+  - text: That is an invalid email. Please try again.
 actions:
 - utter_greet
-- utter_ask_for_connection_date
-- utter_ask_for_time
-- utter_ask_for_email
+- utter_ask_date
+- utter_ask_time
+- utter_ask_email
 - utter_confirm_invite
-- action_ask_for_connection_time
-- action_ask_for_email
-entities:
-- email_id
-- date
-- time
+- utter_ask_for_info
+- action_ask_time
+- action_ask_email
+- validate_fetch_user_info_form
+- utter_invalid_time
+- utter_invalid_email_id
+
+
 session_config:
   session_expiration_time: 60
   carry_over_slots_to_new_session: true

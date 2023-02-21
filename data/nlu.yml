@@ -69,6 +69,8 @@ nlu:
     - I want to connect on [May 12, 2023](date)
     - Set up a call for [12/12/1992](date)
     - I want to connect on [May 12 2023](date)
+    - The date for the connect should be [October 15 2023](date)
+    - The date is [October 22,2023](date)
 - intent: user_provides_time
   examples: |
     - I want to connect on [12:00 AM](time)
@@ -78,6 +80,7 @@ nlu:
     - Lets doing it during the [evening, say 7:00PM](time)?
     - Send me an invite for [1:30 PM](time)
     - Let us do it at [1:30 PM](time)
+    - The time is [6:00 PM](time)
 - intent: user_provides_email
   examples: |
     - Sure, my email is [joe@gmail.com](email_id)
