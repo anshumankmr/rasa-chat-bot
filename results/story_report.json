@@ -5,7 +5,7 @@
     "f1-score": 0.0,
     "support": 1
   },
-  "action_ask_for_connection_time": {
+  "action_ask_time": {
     "precision": 0.0,
     "recall": 0.0,
     "f1-score": 0.0,

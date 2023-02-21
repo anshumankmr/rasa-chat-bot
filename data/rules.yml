@@ -6,3 +6,19 @@ rules:
   steps:
   - intent: greet
   - action: utter_greet
+  
+- rule: Activate User Form rule
+  steps:
+  - intent: ask_for_call
+  - action: utter_ask_for_info
+  - action: fetch_user_info_form
+  - active_loop: fetch_user_info_form
+
+- rule: Submit User Form Rule
+  condition:
+  - active_loop: fetch_user_info_form
+  steps:
+  - action: fetch_user_info_form
+  - active_loop: null
+  - action: utter_confirm_invite
+  - active_loop: fetch_user_info_form
