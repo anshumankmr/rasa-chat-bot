@@ -22,3 +22,12 @@ rules:
   - active_loop: null
   - action: utter_confirm_invite
   - active_loop: fetch_user_info_form
+
+- rule: Interruption in the submission of user Form
+  condition:
+  - active_loop: fetch_user_info_form
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - action: fetch_user_info_form
+  - active_loop: fetch_user_info_form
