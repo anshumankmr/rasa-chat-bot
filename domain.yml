@@ -22,19 +22,29 @@ slots:
     mappings:
     - type: from_entity
       entity: email_id
+      conditions:
+      - active_loop: fetch_user_info_form
+        requested_slot: email_id
   date:
     type: text
     influence_conversation: true
     mappings:
     - type: custom
       action: action_ask_date
+      conditions:
+      - active_loop: fetch_user_info_form
+        requested_slot: date
+    
   time:
     influence_conversation: true
     type: text
     mappings:
     - type: custom
       action: action_ask_time
-
+      conditions:
+      - active_loop: fetch_user_info_form
+        requested_slot: time
+    
 forms:
   fetch_user_info_form:
     required_slots:
