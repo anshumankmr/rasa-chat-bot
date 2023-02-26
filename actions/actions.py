@@ -16,6 +16,7 @@ from datetime import datetime
 from bson import json_util
 from json import dumps
 import re
+from .config.constants import constants
 
 class ActionAskDate(Action):
 
@@ -113,6 +114,12 @@ class ValidateUserInfoForm(FormValidationAction):
         dispatcher.utter_message(text=f"Your Time slot is {slot_value} .")
         return {"time": slot_value}
     
+    def is_email_valid_domain(self,email):
+        print(email)
+        addr = email.split('@')[1]
+        print(addr, addr in constants["valid_domains"])
+        return addr in constants["valid_domains"]
+
     def validate_email_id(
         self,
         slot_value: Any,
@@ -120,8 +127,8 @@ class ValidateUserInfoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
-
-        if not slot_value:
+        print(slot_value)
+        if self.is_email_valid_domain(slot_value) == False:
             dispatcher.utter_message(text=f"The email is invalid")
             return {"email_id": None}
         dispatcher.utter_message(text=f"Your email is  {slot_value} .")
