@@ -18,72 +18,51 @@ from json import dumps
 import re
 from .config.constants import constants
 
-class ActionAskDate(Action):
-
+class ValidateUserInfoForm(FormValidationAction):
     def name(self) -> Text:
-        return "action_ask_fetch_user_info_form_date"
+        return "validate_fetch_user_info_form"
     
-    def valid_date(self, date_entity):
+    async def required_slots(self,domain_slots: List[Text],dispatcher: "CollectingDispatcher",tracker: "Tracker",domain: "DomainDict") -> List[Text]:
+        if tracker.slots.get("date") != None and tracker.slots.get("time") == None and tracker.slots.get('email_id') == None:
+            return ['date', 'time', 'email_id']
+        return domain_slots
+
+    def time_validation_helper(self, date_entity):
+        pattern = re.compile("(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))")
+        return pattern.match(date_entity)
+
+    def date_validation_helper(self, date_entity):
         valid_date = None
         now = datetime.now()
         for possible_date in datefinder.find_dates(date_entity):
             valid_date = possible_date if possible_date > now else None
         return valid_date
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        date = None
-        for e in tracker.latest_message['entities']:
-            if e["entity"] == 'date':
-                date = e["value"]
-        print(date,tracker.latest_message['entities'])
-        if date is not None:
-            valid_date = self.valid_date(date)
-            print('Valid Date' , valid_date)
-            if valid_date is not None: 
-                dispatcher.utter_message(template="utter_ask_for_time",date=date)
-            return [SlotSet("date",dumps(date,default=json_util.default))]
-        return []
+    async def extract_date(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        if tracker.slots.get("date") != None:
+            return tracker.slots.get("date")
+        entities = tracker.latest_message['entities']
+        extracted_date = {"date": None}
+        if entities != None and len(entities) >= 1:
+            for entity in entities:
+                if entity["entity"] == "date":
+                    extracted_date["date"] = entity["value"]
+        return extracted_date
 
-
-class ActionAskTime(Action):
-
-    def name(self) -> Text:
-        return "action_ask_fetch_user_info_form_time"
-    
-    def valid_time(self, date_entity):
-        pattern = re.compile("(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))")
-        return pattern.match(date_entity)
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        time = None
-        for e in tracker.latest_message['entities']:
-            if e["entity"] == 'time':
-                time = e["value"]
-        if time is not None:
-            valid_time = self.valid_time(time)
-            print(valid_time)
-            if valid_time: 
-                dispatcher.utter_message(template="utter_ask_for_time",date=time)
-            return [SlotSet("time",time)]
-        return []
-
-class ActionAskForEmail(Action):
-
-    def name(self) -> Text:
-        return "action_ask_fetch_user_info_form_email"
-
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        return []
-
-class ValidateUserInfoForm(FormValidationAction):
-    def name(self) -> Text:
-        return "validate_fetch_user_info_form"
+    async def extract_time(
+        self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
+    ) -> Dict[Text, Any]:
+        if tracker.slots.get("time") != None:
+            return tracker.slots.get("time")
+        entities = tracker.latest_message['entities']
+        extracted_time = {"time": None}
+        if entities != None and len(entities) >= 1:
+            for entity in entities:
+                if entity["entity"] == "time":
+                    extracted_time["time"] = entity["value"]
+        return extracted_time
 
     def validate_date(
         self,
@@ -92,31 +71,30 @@ class ValidateUserInfoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
-        print("Slot Date",slot_value)
         if slot_value == None:
+            return {"date": None}
+        if self.date_validation_helper(slot_value) == None:
             dispatcher.utter_message(text=f"The date you have provided is invalid")
             return {"date": None}
-        dispatcher.utter_message(text=f"OK! Your date is {slot_value}.")
+        dispatcher.utter_message(text=f"OK! Your date is {slot_value}. Please provide the time for the connect next.")
         return {"date": slot_value}
 
-    def validate_time(
-        self,
-        slot_value: Any,
-        dispatcher: CollectingDispatcher,
-        tracker: Tracker,
-        domain: DomainDict,
-    ) -> Dict[Text, Any]:
-        print('Validate Time', slot_value)
-        if not slot_value:
-            dispatcher.utter_message(text=f"The time is invalid")
+    def validate_time(self,slot_value: Any,dispatcher: CollectingDispatcher,tracker: Tracker,domain: DomainDict,) -> Dict[Text, Any]:
+        if slot_value is None:
             return {"time": None}
-        dispatcher.utter_message(text=f"Your Time slot is {slot_value} .")
+        if self.time_validation_helper(slot_value) == None:
+            dispatcher.utter_message(text=f"The time is invalid.")
+            return {"time": None}
+        dispatcher.utter_message(text=f"Your Time slot is {slot_value}.")
         return {"time": slot_value}
     
     def is_email_valid_domain(self,email):
         addr = email.split('@')[1]
         return addr in constants["valid_domains"]
 
+    def email_validation_helper(self,email):
+        return self.is_email_valid_domain(email)
+    
     def validate_email_id(
         self,
         slot_value: Any,
@@ -124,7 +102,7 @@ class ValidateUserInfoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
-        if self.is_email_valid_domain(slot_value) == False:
+        if self.email_validation_helper(slot_value) == False:
             dispatcher.utter_message(text=f"The email is invalid")
             return {"email_id": None}
         dispatcher.utter_message(text=f"Your email is {slot_value}.")

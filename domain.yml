@@ -9,12 +9,10 @@ intents:
 - user_provides_date
 - user_provides_email
 - user_provides_time
-
 entities:
-- email_id
 - date
+- email_id
 - time
-
 slots:
   email_id:
     type: text
@@ -30,28 +28,25 @@ slots:
     influence_conversation: true
     mappings:
     - type: custom
-      action: action_ask_fetch_user_info_form_date
+      # action: validate_fetch_user_info_form
       conditions:
       - active_loop: fetch_user_info_form
         requested_slot: date
-    
   time:
     influence_conversation: true
     type: text
     mappings:
     - type: custom
-      action: action_ask_fetch_user_info_form_time
+      # action: validate_fetch_user_info_form
       conditions:
       - active_loop: fetch_user_info_form
         requested_slot: time
-    
 forms:
   fetch_user_info_form:
     required_slots:
     - email_id
     - date
     - time
-
 responses:
   utter_greet:
   - text: Hi! How Can I Help you Today?
@@ -68,22 +63,16 @@ responses:
   - text: That is an invalid time. Please try again.
   utter_invalid_email_id:
   - text: That is an invalid email. Please try again.
-
 actions:
+- validate_fetch_user_info_form
+- utter_ask_for_info
+- utter_invalid_time
 - utter_greet
-- utter_ask_date
-- utter_ask_time
 - utter_ask_email
 - utter_confirm_invite
-- utter_ask_for_info
-- action_ask_fetch_user_info_form_time
-- action_ask_fetch_user_info_form_email
-- validate_fetch_user_info_form
-- utter_invalid_time
 - utter_invalid_email_id
-- action_ask_fetch_user_info_form_date
-
-
+- extract_date
+- extract_time
 
 session_config:
   session_expiration_time: 60
