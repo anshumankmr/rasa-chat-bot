@@ -11,7 +11,7 @@ stories:
   - intent: I want to connect
   - action: utter_ask_date
   - intent: May 12 2023
-  - action: action_ask_time
+  - action: action_ask_fetch_user_info_form_time
   - intent: 1:30 PM
   - action: action_ask_email
   - intent: anshumankmr80@gmail.com

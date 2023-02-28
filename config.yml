@@ -3,7 +3,7 @@ recipe: default.v1
 language: en
 
 pipeline:
-- name: SpacyNLP
+- name: "SpacyNLP"
   model: "en_core_web_sm"
 - name: SpacyTokenizer
 - name: SpacyEntityExtractor

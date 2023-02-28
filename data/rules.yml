@@ -20,6 +20,8 @@ rules:
   steps:
   - action: fetch_user_info_form
   - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
   - action: utter_confirm_invite
   - active_loop: fetch_user_info_form
 

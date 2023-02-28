@@ -21,7 +21,7 @@ from .config.constants import constants
 class ActionAskDate(Action):
 
     def name(self) -> Text:
-        return "action_ask_date"
+        return "action_ask_fetch_user_info_form_date"
     
     def valid_date(self, date_entity):
         valid_date = None
@@ -44,14 +44,13 @@ class ActionAskDate(Action):
             if valid_date is not None: 
                 dispatcher.utter_message(template="utter_ask_for_time",date=date)
             return [SlotSet("date",dumps(date,default=json_util.default))]
-        # dispatcher.utter_message(template="utter_invalid_date")   
         return []
 
 
 class ActionAskTime(Action):
 
     def name(self) -> Text:
-        return "action_ask_time"
+        return "action_ask_fetch_user_info_form_time"
     
     def valid_time(self, date_entity):
         pattern = re.compile("(([01]?[0-9]):([0-5][0-9]) ([AaPp][Mm]))")
@@ -75,7 +74,7 @@ class ActionAskTime(Action):
 class ActionAskForEmail(Action):
 
     def name(self) -> Text:
-        return "action_ask_for_email"
+        return "action_ask_fetch_user_info_form_email"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
@@ -115,9 +114,7 @@ class ValidateUserInfoForm(FormValidationAction):
         return {"time": slot_value}
     
     def is_email_valid_domain(self,email):
-        print(email)
         addr = email.split('@')[1]
-        print(addr, addr in constants["valid_domains"])
         return addr in constants["valid_domains"]
 
     def validate_email_id(
@@ -127,9 +124,8 @@ class ValidateUserInfoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
-        print(slot_value)
         if self.is_email_valid_domain(slot_value) == False:
             dispatcher.utter_message(text=f"The email is invalid")
             return {"email_id": None}
-        dispatcher.utter_message(text=f"Your email is  {slot_value} .")
+        dispatcher.utter_message(text=f"Your email is {slot_value}.")
         return {"email_id": slot_value}

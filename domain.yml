@@ -30,7 +30,7 @@ slots:
     influence_conversation: true
     mappings:
     - type: custom
-      action: action_ask_date
+      action: action_ask_fetch_user_info_form_date
       conditions:
       - active_loop: fetch_user_info_form
         requested_slot: date
@@ -40,7 +40,7 @@ slots:
     type: text
     mappings:
     - type: custom
-      action: action_ask_time
+      action: action_ask_fetch_user_info_form_time
       conditions:
       - active_loop: fetch_user_info_form
         requested_slot: time
@@ -58,10 +58,6 @@ responses:
   - text: Hey! How Can I Be of Assistance Today?
   utter_ask_for_info:
   - text: I would need some information from you. I would need the date,time and email address for the connect.
-  # utter_ask_time:
-  # - text: Okay. The time you have provided is {time}.
-  # utter_ask_date:
-  # - text: Okay. The date you have provided is {date}.
   utter_ask_email:
   - text: Okay. The email is {email}.
   utter_confirm_invite:
@@ -72,6 +68,7 @@ responses:
   - text: That is an invalid time. Please try again.
   utter_invalid_email_id:
   - text: That is an invalid email. Please try again.
+
 actions:
 - utter_greet
 - utter_ask_date
@@ -79,11 +76,13 @@ actions:
 - utter_ask_email
 - utter_confirm_invite
 - utter_ask_for_info
-- action_ask_time
-- action_ask_email
+- action_ask_fetch_user_info_form_time
+- action_ask_fetch_user_info_form_email
 - validate_fetch_user_info_form
 - utter_invalid_time
 - utter_invalid_email_id
+- action_ask_fetch_user_info_form_date
+
 
 
 session_config:

@@ -1,11 +1,11 @@
 {
-  "action_ask_for_email": {
+  "action_ask_fetch_user_info_form_email": {
     "precision": 0.0,
     "recall": 0.0,
     "f1-score": 0.0,
     "support": 1
   },
-  "action_ask_time": {
+  "action_ask_fetch_user_info_form_time": {
     "precision": 0.0,
     "recall": 0.0,
     "f1-score": 0.0,

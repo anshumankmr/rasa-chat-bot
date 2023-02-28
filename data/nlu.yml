@@ -30,6 +30,7 @@ nlu:
     - when can I have a call with her?
     - let me know when we can connect
     - I want to connect
+    - connect
 - intent: goodbye
   examples: |
     - cu
@@ -70,7 +71,8 @@ nlu:
     - Set up a call for [12/12/1992](date)
     - I want to connect on [May 12 2023](date)
     - The date for the connect should be [October 15 2023](date)
-    - The date is [October 22,2023](date)
+    - The date is [4 October 2024](date)
+    - the date is [May 22 2023](date)
 - intent: user_provides_time
   examples: |
     - I want to connect on [12:00 AM](time)
