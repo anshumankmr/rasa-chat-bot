@@ -32,37 +32,35 @@ class ValidateUserInfoForm(FormValidationAction):
         return pattern.match(date_entity)
 
     def date_validation_helper(self, date_entity):
+        print(date_entity,datefinder.find_dates(date_entity))
         valid_date = None
         now = datetime.now()
-        for possible_date in datefinder.find_dates(date_entity):
+        for possible_date in datefinder.find_dates(date_entity):#find possible dates in a
             valid_date = possible_date if possible_date > now else None
         return valid_date
+
+    def get_selected_entity(self,tracker,entity_name):
+        entities = tracker.latest_message['entities']
+        extracted_entity = {f"{entity_name}": None}
+        if entities != None and len(entities) >= 1:
+            for entity in entities:
+                if entity["entity"] == entity_name:
+                    extracted_entity[entity_name] = entity["value"]
+        return extracted_entity
 
     async def extract_date(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         if tracker.slots.get("date") != None:
             return tracker.slots.get("date")
-        entities = tracker.latest_message['entities']
-        extracted_date = {"date": None}
-        if entities != None and len(entities) >= 1:
-            for entity in entities:
-                if entity["entity"] == "date":
-                    extracted_date["date"] = entity["value"]
-        return extracted_date
-
+        return self.get_selected_entity(tracker = tracker,entity_name="date")
+        
     async def extract_time(
         self, dispatcher: CollectingDispatcher, tracker: Tracker, domain: Dict
     ) -> Dict[Text, Any]:
         if tracker.slots.get("time") != None:
             return tracker.slots.get("time")
-        entities = tracker.latest_message['entities']
-        extracted_time = {"time": None}
-        if entities != None and len(entities) >= 1:
-            for entity in entities:
-                if entity["entity"] == "time":
-                    extracted_time["time"] = entity["value"]
-        return extracted_time
+        return self.get_selected_entity(tracker = tracker,entity_name="time")
 
     def validate_date(
         self,
@@ -71,21 +69,36 @@ class ValidateUserInfoForm(FormValidationAction):
         tracker: Tracker,
         domain: DomainDict,
     ) -> Dict[Text, Any]:
+        print(tracker.latest_message['entities'])
+        time_entity = self.get_selected_entity(tracker=tracker,entity_name="time")
         if slot_value == None:
             return {"date": None}
         if self.date_validation_helper(slot_value) == None:
-            dispatcher.utter_message(text=f"The date you have provided is invalid")
+            if time_entity is None:
+                dispatcher.utter_message(text=f"The date you have provided is invalid")
+            else:
+                dispatcher.utter_message(text=f"The date you have provided is invalid and")
             return {"date": None}
-        dispatcher.utter_message(text=f"OK! Your date is {slot_value}. Please provide the time for the connect next.")
+        if not time_entity:
+            dispatcher.utter_message(text=f"OK! The date you have provided is {slot_value}. Please provide the time for the connect next.")
+        else:
+            dispatcher.utter_message(text=f"OK! The date you have provided {slot_value} and")
         return {"date": slot_value}
 
     def validate_time(self,slot_value: Any,dispatcher: CollectingDispatcher,tracker: Tracker,domain: DomainDict,) -> Dict[Text, Any]:
         if slot_value is None:
             return {"time": None}
+        date_entity = self.get_selected_entity(tracker=tracker,entity_name="date")
         if self.time_validation_helper(slot_value) == None:
-            dispatcher.utter_message(text=f"The time is invalid.")
+            if date_entity is not None:
+                dispatcher.utter_message(text=f"the time you have provided is invalid.")
+            else:
+                dispatcher.utter_message(text=f"The time you have provided is invalid.")
             return {"time": None}
-        dispatcher.utter_message(text=f"Your Time slot is {slot_value}.")
+        if not date_entity:
+            dispatcher.utter_message(text=f"Your time slot is {slot_value}.")
+        else:
+            dispatcher.utter_message(text=f"and the time you have provided is {slot_value}")
         return {"time": slot_value}
     
     def is_email_valid_domain(self,email):
