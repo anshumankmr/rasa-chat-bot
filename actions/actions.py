@@ -90,7 +90,7 @@ class ValidateUserInfoForm(FormValidationAction):
             else:
                 dispatcher.utter_message(text=f"The date you have provided is invalid and")
             return {"date": None}
-        if not time_entity:
+        if time_entity['time'] is None:
             dispatcher.utter_message(text=f"OK! The date you have provided is {slot_value}. Please provide the time for the connect next.")
         else:
             dispatcher.utter_message(text=f"OK! The date you have provided {slot_value} and")
@@ -106,7 +106,7 @@ class ValidateUserInfoForm(FormValidationAction):
             else:
                 dispatcher.utter_message(text=f"The time you have provided is invalid.")
             return {"time": None}
-        if not date_entity:
+        if date_entity['date'] is None:
             dispatcher.utter_message(text=f"Your time slot is {slot_value}.")
         else:
             dispatcher.utter_message(text=f"and the time you have provided is {slot_value}")
