@@ -13,10 +13,21 @@ from rasa_sdk.types import DomainDict
 from rasa_sdk.events import SlotSet
 import datefinder
 from datetime import datetime
-from bson import json_util
-from json import dumps
+from rasa_sdk.events import UserUtteranceReverted, ConversationPaused
 import re
 from .config.constants import constants
+
+class ActionDefaultFallback(Action):
+    def name(self) -> Text:
+        return "action_default_fallback"
+    
+    def run(self, dispatcher, tracker, domain):
+        message = "Sorry! I didn't get you."
+        dispatcher.utter_message(text=message)
+        # pause tracker
+        # undo last user interaction
+        return [ConversationPaused(), UserUtteranceReverted()]
+
 
 class ValidateUserInfoForm(FormValidationAction):
     def name(self) -> Text:

@@ -10,9 +10,9 @@ intents:
 - user_provides_email
 - user_provides_time
 entities:
-- date
 - email_id
-- time
+- DATE
+- TIME
 slots:
   email_id:
     type: text
@@ -73,6 +73,7 @@ actions:
 - utter_invalid_email_id
 - extract_date
 - extract_time
+- action_default_fallback
 
 session_config:
   session_expiration_time: 60
