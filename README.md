@@ -9,3 +9,6 @@ Tasks
 - Set up CI/CD Pipeline with AWS App Runner/ Google Cloud Run [TBD]
 - Add Documentation for the Same [TBD]
 - Set up Demo Chat Widget [OPTIONAL]
+
+Story
+![Story](./assets/image.png)
